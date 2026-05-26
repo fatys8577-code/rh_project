@@ -1,0 +1,56 @@
+{% extends 'rh/base.html' %}
+{% block content %}
+
+<div class="row justify-content-center ">
+    <div class="col-md-6">
+        <div class="card mt-5">
+            <div class="card-header text-center">
+                <h3>🖐️ Bienvenue !</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p>{{ field.label }} : {{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label>📧 Email</label>
+                        <input type="email" name="email" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>👤 Nom</label>
+                        <input type="text" name="nom" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>👤 Prenom</label>
+                        <input type="text" name="prenom" class="form-control">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label>🔒 Mot de passe</label>
+                        <input type="password" name="password1" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>🔒 Confirmer</label>
+                        <input type="password" name="password2" class="form-control">
+                    </div>
+                    <BUtton type="submit" class="btn btn-primary">
+                        Créer mon compte
+                    </BUtton>
+                </form>
+                <hr>
+                <a href="{% url 'connexion'%}">🔐 Déjà un compte ?</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

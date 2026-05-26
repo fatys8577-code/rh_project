@@ -1,0 +1,71 @@
+{% extends 'rh/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h2>📅 Liste des Congés</h2>
+        <hr>
+    </div>
+</div>
+
+<a href="{% url 'dashboard' %}" class="btn btn-primary">
+    Retour
+</a>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-bordered table-hover">
+            <thead class="table-primary">
+               <tr>
+                 <th>👤 Employé</th>
+                 <th>📅 Début</th>
+                 <th>📅 Fin</th>
+                 <th>📝 Motif</th>
+                 <th>🔖 Statut</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for conge in conges %}
+                <tr>
+                    <td>{{ conge.employe.user.prenom}} {{ conge.employe.user.nom}}</td>
+                    <td>{{ conge.date_debut}}</td>
+                    <td>{{ conge.date_fin}}</td>
+                    <td>{{ conge.motif}}</td>
+                    <td>
+                        {% if conge.statut == 'approuve' %}
+                        <span class="badge bg-success">✅ Approuvé</span>
+                        {% elif conge.statut == 'rejete' %}
+                        <span badge bg-danger>❌ Rejeté</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">⏳ En attente</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">😕 Aucun congé trouvé.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col text-center">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number}}" 
+            class="btn btn-primary"> ⬅ Précédent</a>
+        {% endif %}
+
+        <span class="mx-3">
+            Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages}}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"
+            class="btn btn-primary">Suivant ➡</a>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
