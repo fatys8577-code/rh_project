@@ -1,0 +1,21 @@
+<table class="table">
+    <tbody>
+        {% for conge in conges_en_attente %}
+        <tr>
+            <td>{{ conge.user.get_full_name }}</td>
+            <td>{{ conge.date_debut }} au {{ conge.date_fin }}</td>
+            <td>{{ conge.motif }}</td>
+            <td>
+                <form action="{% url 'traiter_conge' conge.pk 'approuver' %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-success">✅ Approuver</button>
+                </form>
+                <form action="{% url 'traiter_conge' conge.pk 'rejeter' %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger">❌ Rejeter</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

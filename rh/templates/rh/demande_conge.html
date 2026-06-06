@@ -1,0 +1,35 @@
+{% extends 'rh/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card mt-4">
+      <div class="card-header text-center">
+        <h4>📅 Demande de Congé</h4>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label>📅 Date de début</label>
+            {{ form.date_debut }}
+          </div>
+          <div class="mb-3">
+            <label>📅 Date de fin</label>
+            {{ form.date_fin }}
+          </div>
+          <div class="mb-3">
+            <label>📝 Motif</label>
+            {{ form.motif }}
+          </div>
+          <button type="submit" class="btn btn-primary">
+            📤 Envoyer la demande
+          </button>
+          <a href="{% url 'conge_list' %}" class="btn btn-secondary">
+            ⬅ Retour
+          </a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

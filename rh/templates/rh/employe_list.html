@@ -1,0 +1,50 @@
+{% extends 'rh/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h2>👥 Liste des Employés</h2>
+        <hr>
+    </div>
+</div>
+
+<a href="{% url 'dashboard' %}" class="btn btn-primary">
+    Retour
+</a>
+
+<div class="row">
+  {% for employe in employes %}
+  <div class="col-md-4 mb-3">
+    <div class="card">
+      <div class="card-body">
+        <h5>👤 {{ employe.user.prenom }} {{ employe.user.nom }}</h5>
+        <p>💼 <strong>Poste :</strong> {{ employe.poste }}</p>
+        <p>🏢 <strong>Service :</strong> {{ employe.service }}</p>
+        <p>📅 <strong>Embauche :</strong> {{ employe.date_embauche }}</p>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col">
+    <p>😕 Aucun employé trouvé.</p>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="row mt-3">
+    <div class="col text-center">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number}}" 
+            class="btn btn-primary"> ⬅ Précédent</a>
+        {% endif %}
+
+        <span class="mx-3">
+            Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages}}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"
+            class="btn btn-primary">Suivant ➡</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

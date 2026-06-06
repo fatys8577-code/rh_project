@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">📊 Mon Solde Global</div>
+                <div class="card-body">
+                    <h2 class="card-title text-center">{{ solde_restant }} Jours</h2>
+                    <p class="card-text text-center">Disponibles pour l'année en cours.</p>
+                </div>
+            </div>
+            <a href="{% url 'faire_demande' %}" class="btn btn-primary w-100">📅 Faire une nouvelle demande</a>
+        </div>
+        
+        <div class="col-md-8">
+            <h3>📜 Historique de mes demandes de congés</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Période</th>
+                        <th>Motif</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for conge in mes_conges %}
+                    <tr>
+                        <td>Du {{ conge.date_debut }} au {{ conge.date_fin }}</td>
+                        <td>{{ conge.motif }}</td>
+                        <td>
+                            {% if conge.statut == 'APPROUVE' %}
+                                <span class="badge bg-success">Approuvé</span>
+                            {% elif conge.statut == 'REJETE' %}
+                                <span class="badge bg-danger">Rejeté</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">En attente</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">Aucune demande enregistrée.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

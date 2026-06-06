@@ -1,0 +1,57 @@
+{% extends 'rh/base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col">
+    <h2>🏠 Tableau de bord</h2>
+    <p>Bonjour <strong>{{ user.prenom }}</strong> 👋</p>
+    {% if user.is_superuser %}
+    <a href="{% url 'admin:index' %}" class="btn btn-danger mb-4">
+      ⚙️ Administration
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-3 mt-2">
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5>👥 Employés</h5>
+        <a href="{% url 'employe_list' %}" class="btn btn-primary">
+          Voir la liste
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5>📅 Congés</h5>
+        <a href="{% url 'conge_list' %}" class="btn btn-primary">
+          Voir les congés
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5>📤 Demande</h5>
+        <a href="{% url 'demande_conge' %}" class="btn btn-primary">
+          Faire une demande
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5>👤 Mon Profil</h5>
+        <a href="{% url 'profil' %}" class="btn btn-primary">
+          Mon profil
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

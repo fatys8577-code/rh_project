@@ -1,0 +1,101 @@
+{% extends 'rh/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📅 Liste des Congés</h2>
+        <a href="/" class="btn btn-secondary">Retour</a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-info text-white shadow-sm">
+                <div class="card-body py-2 px-3">
+                    <h5 class="mb-0">📊 Mon Solde Restant : <strong>{{ user.solde_conge|default:"30" }} jours</strong></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-bordered table-hover mb-0">
+                <thead class="table-primary">
+                    <tr>
+                        <th>👤 Employé</th>
+                        <th>📅 Début</th>
+                        <th>📅 Fin</th>
+                        <th>📝 Motif</th>
+                        <th>⚙️ Statut / Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for conge in conges %}
+                        {% if user.is_staff or perms.RH.change_demandeconge or conge.employe.user == user %}
+                        <tr>
+                            <td>{{ conge.employe.user.prenom }} {{ conge.employe.user.nom }}</td>
+                            <td>{{ conge.date_debut }}</td>
+                            <td>{{ conge.date_fin }}</td>
+                            <td>{{ conge.motif }}</td>
+                            <td>
+                                {% if conge.statut == 'APPROUVE' or conge.statut == 'approuve' %}
+                                    <span class="badge bg-success">✅ Approuvé</span>
+                                    
+                                {% elif conge.statut == 'REJETE' or conge.statut == 'rejete' %}
+                                    <span class="badge bg-danger">❌ Rejeté</span>
+                                    
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">⏳ En attente</span>
+                                    
+                                    {% if perms.RH.change_demandeconge or user.is_staff %}
+                                        <div class="mt-2 d-flex gap-1">
+                                            <form action="{% url 'traiter_conge' conge.pk 'approuver' %}" method="POST" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-success py-0 px-2">Approuver</button>
+                                            </form>
+                                            
+                                            <form action="{% url 'traiter_conge' conge.pk 'rejeter' %}" method="POST" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-danger py-0 px-2">Rejeter</button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-3 text-muted">Aucune demande de congé enregistrée.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if is_paginated %}
+        <nav class="mt-3">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+                    </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                </li>
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+</div>
+{% endblock %}
